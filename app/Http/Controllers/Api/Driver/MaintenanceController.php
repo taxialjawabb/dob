@@ -136,7 +136,7 @@ class MaintenanceController extends Controller
             $size = $file->getSize();
             $mim  = $file->getMimeType();
             $realpath = $file->getRealPath();
-            $image = time().'.'.$ext;
+            $image = rand(10000000,999999999). time().'.'.$ext;
             $path = 'images/drivers/maintenance/'.$source;
             $file->move(public_path($path),$image);
             return  $path.'/'.$image;
