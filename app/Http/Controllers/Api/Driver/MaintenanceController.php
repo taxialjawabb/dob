@@ -57,8 +57,8 @@ class MaintenanceController extends Controller
             $maintenance = new Maintenance();
             $maintenance->maintenance_type = $request->maintenance_type;
             $maintenance->counter_number = $request->counter_number;
-            $maintenance->counter_photo = $this->save_image( $request->counter_photo, 'counter');
-            $maintenance->bill_photo = $this->save_image( $request->bill_photo, 'bills');
+            $maintenance->counter_photo = $this->save_image( $request->counter_photo, 'counter/');
+            $maintenance->bill_photo = $this->save_image( $request->bill_photo, 'bills/');
             $maintenance->added_date = Carbon::now();
             $maintenance->maintenance_note = $request->maintenance_note;
             $maintenance->vechile_id = $request->vechile_id;
