@@ -30,10 +30,10 @@ class AssignGaurd
               //  $user = $this->auth->authenticate($request);  //check authenticted user
                 $user = JWTAuth::parseToken()->authenticate();
             } catch (TokenExpiredException $e) {
-                return  $this -> returnError('401','Unauthenticated user');
+                return  $this -> returnErrorApiAuth();
             } catch (JWTException $e) {
 
-                return  $this -> returnError('', 'token_invalid'.$e->getMessage());
+                return  $this -> returnErrorApiAuth();
             }
 
         }

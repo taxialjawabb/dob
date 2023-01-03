@@ -24,24 +24,24 @@ class CheckAdminToken
             $user = JWTAuth::parseToken()->authenticate();
         } catch (\Exception $e) {
             if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
-                return $this -> returnError('E3001','INVALID_TOKEN');
+                return $this -> returnErrorApiAuth();
             } else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
-                return $this -> returnError('E3001','EXPIRED_TOKEN');
+                return $this -> returnErrorApiAuth();
             } else {
-                return $this -> returnError('E3001','TOKEN_NOTFOUND');
+                return $this -> returnErrorApiAuth();
             }
         } catch (\Throwable $e) {
             if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
-                return $this -> returnError('E3001','INVALID_TOKEN');
+                return $this -> returnErrorApiAuth();
             } else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
-                return $this -> returnError('E3001','EXPIRED_TOKEN');
+                return $this -> returnErrorApiAuth();
             } else {
-                return $this -> returnError('E3001','TOKEN_NOTFOUND');
+                return $this -> returnErrorApiAuth();
             }
         }
 
         if (!$user)
-        $this -> returnError(trans('Unauthenticated'));
+         $this -> returnErrorApiAuth();
         return $next($request);
     }
 }

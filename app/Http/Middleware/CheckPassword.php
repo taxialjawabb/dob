@@ -17,7 +17,14 @@ class CheckPassword
     public function handle(Request $request, Closure $next)
     {
         if($request->api_password !== env('API_PASSWORD','N3n2I4iC2FVdyr2a4NoFXwFiijsJQgc5Zn4UFFPS')){
-            return response()->json(['message'=>'not allowed']);
+            return response()->json([
+                'success' => true,
+                'status'=>3,
+                'message' => "unAthenticated",
+                'data' => '"unAthenticated"',
+                'errorId' => '777777',
+
+            ]);
         }
         return $next($request);
     }

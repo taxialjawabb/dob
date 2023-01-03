@@ -75,7 +75,17 @@ trait GeneralTrait
 
         ]);
     }
+    public function returnErrorApiAuth()
+    {
+        return response()->json([
+            'success' => true,
+            'status'=>3,
+            'message' => "unAthenticated",
+            'data' => '"unAthenticated"',
+            'errorId' => '777777',
 
+        ]);
+    }
 
     public function returnSuccessMessage($msg = "")
     {
