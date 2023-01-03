@@ -4,9 +4,11 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use App\Traits\GeneralTrait;
 
 class CheckPassword
 {
+    use GeneralTrait;
     /**
      * Handle an incoming request.
      *
@@ -17,14 +19,7 @@ class CheckPassword
     public function handle(Request $request, Closure $next)
     {
         if($request->api_password !== env('API_PASSWORD','N3n2I4iC2FVdyr2a4NoFXwFiijsJQgc5Zn4UFFPS')){
-            return response()->json([
-                'success' => true,
-                'status'=>3,
-                'message' => "unAthenticated",
-                'data' => '"unAthenticated"',
-                'errorId' => '777777',
-
-            ]);
+            return $this -> returnErrorApiAuth();
         }
         return $next($request);
     }

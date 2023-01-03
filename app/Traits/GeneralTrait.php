@@ -81,7 +81,7 @@ trait GeneralTrait
             'success' => true,
             'status'=>3,
             'message' => "unAthenticated",
-            'data' => null,
+            'data' => "unAthenticated",
             'errorId' => '777777',
 
         ]);
