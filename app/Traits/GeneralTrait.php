@@ -10,7 +10,7 @@ trait GeneralTrait
 
     public function send_code($phone , $message, $phone_id)
     {
-        
+
         if($phone === "0576298725")
         {
             $code = 4455;
@@ -48,12 +48,12 @@ trait GeneralTrait
         $resp = json_decode($response);
 
         if($resp->statusCode === 201){
-            return $code;
+            return (string)$code;
         }
         else{
             return false;
         }
-        
+
         // $time = \Carbon\Carbon::now()->format('H:i');
         // $date = \Carbon\Carbon::now()->toDateString();
         // $ss = "https://www.hisms.ws/api.php?send_sms&username=966532760660&password=Qp@@5SR0FFf@9nX&numbers=".$phone."&sender=TaxiAljawab&message=".$message."&date=".$date."&time=".$time;
@@ -67,9 +67,12 @@ trait GeneralTrait
     public function returnError($errNum, $msg)
     {
         return response()->json([
-            'success' => false,
-            'errorNum' => $errNum,
-            'message' => $msg
+            'success' => true,
+            'status'=>0,
+            'message' => $msg,
+            'data' => $msg,
+            'errorId' => $errNum,
+
         ]);
     }
 
@@ -78,18 +81,21 @@ trait GeneralTrait
     {
         return [
             'success' => true,
-            // 'errorNum ' => $errNum,
-            'message' => $msg
+            'status'=>1,
+            'message' => 'code send successfully',
+            'data' => $msg,
+            'errorId'=>''
         ];
     }
 
-    public function returnData($key, $value, $msg = "")
+    public function returnData($value, $msg = "")
     {
         return response()->json([
             'success' => true,
-            //'errorNum ' => "S000",
+            'status'=>1,
             'message' => $msg,
-            $key => $value
+            'data' => $value,
+            'errorId'=>''
         ]);
     }
 
