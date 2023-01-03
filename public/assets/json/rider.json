@@ -1,0 +1,24 @@
+{
+    "sProcessing": "جاري التحميل...",
+    "sLengthMenu": "عـرض _MENU_ الركاب",
+    "sZeroRecords": "لم يتم العثور على نتائج",
+    "sEmptyTable": "لا توجد بيانات متاحة في هذا الجدول",
+    "sInfo": "عرض الركاب من _START_ إلى _END_ من إجمالي _TOTAL_ من ركاب",
+    "sInfoEmpty": "عرض الركاب من 0 إلى 0 من إجمالي 0 ركاب",
+    "sInfoFiltered": "(تصفية إجمالي _MAX_ من الركاب)",
+    "sInfoPostFix": "",
+    "sSearch": "بـحــث:",
+    "sUrl": "",
+    "sInfoThousands": ",",
+    "sLoadingRecords": "التحميل...",
+    "oPaginate": {
+        "sFirst": "الأول",
+        "sLast": "الأخير",
+        "sNext": "التالى",
+        "sPrevious": "السابق"
+    },
+    "oAria": {
+        "sSortAscending": ": التفعيل لفرز العمود بترتيب تصاعدي",
+        "sSortDescending": ": التفعيل لفرز العمود بترتيب تنازلي"
+    }
+}

@@ -1,0 +1,59 @@
+.arrow {
+    border: solid #0d6efd;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+  }
+
+  .right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+  }
+
+  .left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+  }
+
+  .up {
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+  }
+
+  .down {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+  }
+
+@font-face {
+    font-family: 'noto';
+    src: url('../fonts/NotoNaskhArabic-VariableFont_wght.ttf');
+}
+*{
+    font-family: 'noto';
+    font-size: 16px;
+    font-weight: bold;
+}
+.input-style {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+@media print
+{
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }
+
+    td {
+        color: black;
+        font-size: 20px;
+        padding: 0px;
+        margin: 0px;
+    }
+    .border-print{
+        height: calc(100vh - 5mm);
+    }
+
+}
