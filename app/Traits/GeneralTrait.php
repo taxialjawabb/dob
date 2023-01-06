@@ -71,7 +71,7 @@ trait GeneralTrait
             'status'=>0,
             'message' => $msg,
             'data' => $msg,
-            'errorId' => $errNum,
+            'errorId' =>  (string)$errNum,
 
         ]);
     }
@@ -82,7 +82,7 @@ trait GeneralTrait
             'status'=>3,
             'message' => "unAthenticated",
             'data' => null,
-            'errorId' => '777777',
+            'errorId' => (string)'777777',
 
         ]);
     }
