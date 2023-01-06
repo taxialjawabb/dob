@@ -70,7 +70,7 @@ trait GeneralTrait
             'success' => true,
             'status'=>0,
             'message' => $msg,
-            'data' => $msg,
+            'data' =>null,
             'errorId' =>  (string)$errNum,
 
         ]);
