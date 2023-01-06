@@ -98,10 +98,10 @@ class MessagesController extends Controller
 
             $driver = Driver::Where('phone', $request->phone)->get();
             if(count($driver) === 0){
-                return $this->returnError('100001', 'phone number is not exist');
+                return $this->returnError('100008', 'phone number is not exist');
             }
             else if(count($driver) > 0 && $driver[0]->state === 'deleted'){
-                return $this->returnError('100002', 'phone number is not exist');
+                return $this->returnError('100001', 'phone number is not exist');
             }
             else
             {

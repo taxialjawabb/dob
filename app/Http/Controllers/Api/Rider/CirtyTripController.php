@@ -196,11 +196,11 @@ class CirtyTripController extends Controller
                 }
             }
             else{
-                return $this->returnError('100016',"هذا الرحلة لم تعد متاحة ");
+                return $this->returnError('100010',"هذا الرحلة لم تعد متاحة ");
             }
         }
         else{
-            return $this->returnError('100016',"حدث خطاء هذه الرحلة لم تعد متاحة ");
+            return $this->returnError('100010',"حدث خطاء هذه الرحلة لم تعد متاحة ");
         }
     }
 

@@ -27,7 +27,8 @@ class MaintenanceController extends Controller
         $data = Maintenance::where('driver_id', $request->driver_id)->where('vechile_id', $request->vechile_id)
         ->orderBy('added_date', 'desc')->get();
         $driver = Driver::find($request->driver_id);
-        if($driver == null){
+        if($driver == null)
+        {
             return $this->returnError('100008',"حدث خطاء الرجاء المحاولة فى وقت لاحق");
         }
         if(count($data) === 0){
@@ -53,7 +54,7 @@ class MaintenanceController extends Controller
 
             return $this->returnData($data,"تم حفظ بيانات الصيانة بنجاح");
         }
-        else if( count($data) === 1){
+        else if(count($data) === 1){
             $maintenance = new Maintenance();
             $maintenance->maintenance_type = $request->maintenance_type;
             $maintenance->counter_number = $request->counter_number;
@@ -124,8 +125,9 @@ class MaintenanceController extends Controller
 
             return $this->returnData($data,"تم حفظ بيانات الصيانة بنجاح");
         }
-        else{
-            return $this->returnError('10'," .حدث خطاء الرجاء المحاولة فى وقت لاحق");
+        else
+        {
+            return $this->returnError('100005'," .حدث خطاء الرجاء المحاولة فى وقت لاحق");
         }
     }
 

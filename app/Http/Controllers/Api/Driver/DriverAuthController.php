@@ -96,7 +96,7 @@ class DriverAuthController extends Controller
                 return $this -> returnData($data,'login successfuly');  
             }    
         }catch(\Exception $ex){
-            return $this->returnError($ex->getCode(), $ex->getMessage());
+            return $this->returnError('100004', $ex->getMessage());
         }
         
     }
@@ -109,11 +109,11 @@ class DriverAuthController extends Controller
         ]);
         $driver = Driver::where("phone",$request->phone)->get();
         if(count($driver) > 0 && $driver[0]->state === 'deleted'){
-            return $this->returnError('00001', "phone number is deleted ");
+            return $this->returnError('100001', "phone number is deleted ");
             
         }
         if(count($driver) > 0 && $driver[0]->state === 'blocked'){
-            return $this->returnError('00002', "phone number is blocked ");            
+            return $this->returnError('100002', "phone number is blocked ");            
         }
         if(count($driver) > 0){
             $verison = Version::all();
@@ -227,14 +227,14 @@ class DriverAuthController extends Controller
 
                 JWTAuth::setToken($token)->invalidate(); //logout
             }catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e){
-                return  $this -> returnError('','some thing went wrongs');
+                return  $this -> returnError('100000','some thing went wrongs');
             }
             // catch(\Exception $ex){
             //     return $this->returnError($ex->getCode(), $ex->getMessage());
             // }   
             return $this->returnSuccessMessage("Logout Successfully");
         }else{
-            return $this->returnError('100017', 'some thing is wrongs');
+            return $this->returnError('100000', 'some thing is wrongs');
         }
     }
 
@@ -289,10 +289,10 @@ class DriverAuthController extends Controller
                     return $this -> returnData($data,'Email updated successfuly');
                 }
             }catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e){
-                return $this->returnError('100013', "Email is't not update");
+                return $this->returnError('100000', "Email is't not update");
             }
         }
-        return $this->returnError('100008', "Email is't not update");
+        return $this->returnError('100000', "Email is't not update");
     }
     public function name_update(Request $request)
     {
@@ -331,7 +331,7 @@ class DriverAuthController extends Controller
                 $driverData = Auth::guard('driver-api') -> user();
                 $driver = Driver::where('phone', $request->phone)->get();
                 if(count($driver)){
-                    return $this->returnError('100015', "Phone number already exist");
+                    return $this->returnError('100008', "Phone number already exist");
                 }
                 if($driverData !== null){
                     $driverData->phone = $request->phone;
@@ -375,10 +375,10 @@ class DriverAuthController extends Controller
                     return $this -> returnData($data,'phone updated successfuly');
                 }
             }catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e){
-                return $this->returnError('100014', "Phone is't not update");
+                return $this->returnError('100000', "Phone is't not update");
             }
         }
-        return $this->returnError('100014', "Phone is't not update");     
+        return $this->returnError('100000', "Phone is't not update");     
     }
     public function password_update(Request $request)
     {
@@ -404,16 +404,16 @@ class DriverAuthController extends Controller
                         return $this -> returnData('driver' , $driverData,'Password updated successfuly');
                     }
                     else{
-                        return $this->returnError('100008', "Password is't not update");
+                        return $this->returnError('100009', "Password is't not update");
                     }
                 }else{
-                    return $this->returnError('100018', "Password is't not update");
+                    return $this->returnError('100008', "Password is't not update");
                 }
             }catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e){
-                return $this->returnError('100018', "Password is't not update");
+                return $this->returnError('100000', "Password is't not update");
             }
         }
-        return $this->returnError('100018', "Password is't not update");     
+        return $this->returnError('100000', "Password is't not update");     
     }
 
     public function id_expiration_date_update(Request $request)
@@ -630,14 +630,14 @@ class DriverAuthController extends Controller
 
                 JWTAuth::setToken($token)->invalidate(); //logout
             }catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e){
-                return  $this -> returnError('','some thing went wrongs');
+                return  $this -> returnError('100000','some thing went wrongs');
             }
             // catch(\Exception $ex){
             //     return $this->returnError($ex->getCode(), $ex->getMessage());
             // }   
             return $this->returnSuccessMessage("delete account succesfully");
         }else{
-            return $this->returnError('', 'some thing is wrongs');
+            return $this->returnError('100000', 'some thing is wrongs');
         }
     }
 
