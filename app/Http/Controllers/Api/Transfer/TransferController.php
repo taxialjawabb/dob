@@ -21,55 +21,74 @@ class TransferController extends Controller
         ]);
         $rider = \App\Models\Rider::select(['id','phone', 'account'])->find($request->rider_id);
         if($rider === null){
-            return $this->returnError('E005',"حدث خطاء ما الرجاء المحاولة مرة اخرى");
+            return $this->returnError('100008',"حدث خطاء ما الرجاء المحاولة مرة اخرى");
         }
         if($request->type === 'driver'){
-            $data = \App\Models\Driver::select(['id', 'name', 'phone'])
+            $dataDriver = \App\Models\Driver::select(['id', 'name', 'phone'])
                                         ->where("phone" , $request->phone)->get();
-            if(count($data) > 0){
+            if(count($dataDriver) > 0){
                 if($rider->account > $request->money){
                     // $job = $request->type === 'driver'? 'السائق' : 'العميل';
                     $message ="مرحبا عميل الجواب تفعيل عملية تحويل رصيد الرمز ";
                     $code = $this->send_code($rider->phone, $message , $request->phone_id );
-                    if($code !== false){
-                        $data[0]->code = $code;
-                        return $this -> returnData('data' , $data[0], 'driver data'); 
+                    if($code !== false){ 
+                        $dataDriver[0]->code = $code;
+                        $dataDriver[0]->amount = $request->money;
+
+                        $data = (object)[
+
+                            'name'=>(string)$dataDriver[0]->name,
+                            'code'=>(string)$dataDriver[0]->code,
+                            'amount'=>(string)$dataDriver[0]->amount,
+                            'phone'=>(string)$dataDriver[0]->phone
+                        ];
+                        return $this -> returnData( $data, 'driver data'); 
+
                     }else{
-                        return $this->returnError('', "verification code has not sent ");
+                        return $this->returnError('100003', "verification code has not sent ");
                     } 
                 }else{
-                    return $this->returnError('E001',"لا يوجد رصيد كافى ");
+                    return $this->returnError('100011',"لا يوجد رصيد كافى ");
+
                 }
             }else{
-                return $this->returnError('E002',"لا يوجد بيانات بهذا الرقم الرجاء التأكد من البيانات ");
+                return $this->returnError('100012',"لا يوجد بيانات بهذا الرقم الرجاء التأكد من البيانات ");
 
             }
         }
         else if($request->type === 'rider')
         {
-            $data = \App\Models\Rider::select(['id', 'name', 'phone'])
+            $dataDriver = \App\Models\Rider::select(['id', 'name', 'phone'])
                                         ->where("phone" , $request->phone)->get();
-            if(count($data) > 0){
+            if(count($dataDriver) > 0){
                 if($rider->account > $request->money){
-                    // $job = $request->type === 'driver'? 'السائق' : 'العميل';
+                   
                     $message ="مرحبا عميل الجواب عملية تحويل رصيد الرمز ";
                     $code = $this->send_code($rider->phone, $message , $request->phone_id );
                     if($code !== false){
-                        $data[0]->code = $code;
-                        return $this -> returnData('data' , $data[0], 'rider data'); 
+                        $dataDriver[0]->code = $code;
+                        $dataDriver[0]->amount = $request->money;
+                        $data = (object)[
+                            'name'=>(string)$dataDriver[0]->name,
+                            'code'=>(string)$dataDriver[0]->code,
+                            'amount'=>(string)$dataDriver[0]->amount,
+                            'phone'=>(string)$dataDriver[0]->phone
+                        ];
+                        return $this -> returnData($data, 'rider data');
                     }else{
-                        return $this->returnError('', "verification code has not sent ");
+                        return $this->returnError('100003', "verification code has not sent ");
+        
                     }   
                 }else{
-                    return $this->returnError('E001',"لا يوجد رصيد كافى ");
+                    return $this->returnError('100011',"لا يوجد رصيد كافى ");
                 }
             }else{
-                return $this->returnError('E002',"لا يوجد بيانات بهذا الرقم الرجاء التأكد من البيانات ");
+                return $this->returnError('100012',"لا يوجد بيانات بهذا الرقم الرجاء التأكد من البيانات ");
 
             }
         }
         else{
-            return $this->returnError('E003',"الرجاء التأكد من الجهة المحول لها  ");
+            return $this->returnError('100012',"الرجاء التأكد من الجهة المحول لها  ");
         }
         
     }
@@ -95,7 +114,8 @@ class TransferController extends Controller
                     // $job = $request->type === 'driver'? 'السائق' : 'العميل';
                     $message ="مرحبا سائق الجواب عملية تحويل رصيد الرمز ";
                     $code = $this->send_code($driver->phone, $message , $request->phone_id );
-                    if($code !== false){
+                    if($code !== false)
+                    {
                         $dataDriver[0]->code = $code;
                         $dataDriver[0]->amount = $request->money;
 
@@ -107,7 +127,8 @@ class TransferController extends Controller
                             'phone'=>(string)$dataDriver[0]->phone
                         ];
                         return $this -> returnData( $data, 'driver data'); 
-                    }else{
+                    }else
+                    {
                         return $this->returnError('100003', "verification code has not sent ");
                     }   
                 }else{

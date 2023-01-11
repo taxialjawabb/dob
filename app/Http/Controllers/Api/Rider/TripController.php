@@ -227,31 +227,78 @@ class TripController extends Controller
         $request->validate([
             'rider_id' =>'required',
             ]);
-        $trip = DB::table('trips')->select([
-            "trips.id",
-            "trips.state",
-            "trips.trip_type",
-            "trips.start_loc_name",
-            "trips.end_loc_name",
-            "trips.reqest_time",
-            "trips.trip_time",
-            "trips.payment_type",
-            "trips.cost",
-            "driver.name",
-            "driver.phone",
-            "vechile.plate_number",
-        ])
+
+            $trip = Trip::select([
+
+                "trips.id",
+                "trips.state",
+                "trips.trip_type",
+                "trips.start_loc_latitude",
+                "trips.start_loc_longtitude",
+                "trips.start_loc_name",
+                "trips.end_loc_name",
+                "trips.reqest_time",
+                "trips.trip_time",
+                "trips.payment_type",
+                "trips.cost",
+                "driver.name as driver",
+                "vechile.plate_number",
+                "driver.name as driver",
+                "driver.phone as driver_phone",
+                "vechile.plate_number as plate_number",
+    
+            ])   
+
         ->leftJoin('driver', 'trips.driver_id', '=', 'driver.id')
         ->leftJoin('vechile', 'driver.current_vechile', '=', 'vechile.id')
         ->where('rider_id',$request->rider_id)
         ->where('trips.state','!=', 'rejected')
+        ->where('trips.trip_type','=', 'internal')
         ->orderBy('reqest_time', 'desc')
         ->paginate(10);
-        if($trip){
-            return $this->returnSuccessMessage($trip);
-        }else{
-            return $this->returnError('E003', 'there is no trips');
-        }
+      
+         return $this->returnData($trip,'Trips Internal');
+       
+
+    }
+
+    public function trips_city(Request $request)
+    {
+        $request->validate([
+            'rider_id' =>'required',
+            ]);
+
+            $trip = Trip::select([
+
+                "trips.id",
+                "trips.state",
+                "trips.trip_type",
+                "trips.start_loc_latitude",
+                "trips.start_loc_longtitude",
+                "trips.start_loc_name",
+                "trips.end_loc_name",
+                "trips.reqest_time",
+                "trips.trip_time",
+                "trips.payment_type",
+                "trips.cost",
+                "driver.name as driver",
+                "vechile.plate_number",
+                "driver.name as driver",
+                "driver.phone as driver_phone",
+                "vechile.plate_number as plate_number",
+    
+            ])   
+
+        ->leftJoin('driver', 'trips.driver_id', '=', 'driver.id')
+        ->leftJoin('vechile', 'driver.current_vechile', '=', 'vechile.id')
+        ->where('rider_id',$request->rider_id)
+        ->where('trips.state','!=', 'rejected')
+        ->where('trips.trip_type','=', 'city')
+        ->orderBy('reqest_time', 'desc')
+        ->paginate(10);
+      
+         return $this->returnData($trip,'Trips City');
+       
 
     }
 

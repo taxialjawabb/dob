@@ -15,8 +15,17 @@ class Rider extends Authenticatable implements JWTSubject {
      *
      * @var array<int, string>
      */
-    protected $fillable = [
+    protected $casts = [
+        'account'  => "decimal:2",
+        'rider_rate'  => "decimal:1",
+        'rider_counter'  => "decimal:1",
+        'id'  => "string",
+        ];
+     protected $fillable = [
         'name',
+        'id',
+        'rider_rate',
+        'rider_counter',
         'password',
         'state',
         'email',
@@ -24,6 +33,7 @@ class Rider extends Authenticatable implements JWTSubject {
         'email_verified_at',
         'phone',
         'phone_verified_at',
+        'account',
         'remember_token',
         'created_at',
         'updated_at',

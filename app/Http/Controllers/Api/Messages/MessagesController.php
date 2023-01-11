@@ -16,23 +16,60 @@ class MessagesController extends Controller
     public function send_message(Request $request)
     {
         $request->validate([
+            'type_verification'=> 'required|string',
             'phone'    => 'required|string|min:10|max:14',
             'phone_id'    => 'required|string',
 
         ]);
-        $rider = Rider::Where('phone', $request->phone)->get();
-        if(count($rider) > 0){
-            return $this->returnError('E001', 'phone number is already exist');
+
+
+        if($request->type_verification=='hasAccount')
+        {
+            $rider = Rider::Where('phone', $request->phone)->get();
+            if(count($rider) === 0){
+                return $this->returnError('100008', 'phone number is not exist');    
+            
+            }
+            else if(count($rider) > 0 && $rider[0]->state === 'deleted'){
+                return $this->returnError('100001', 'phone number is not exist');
+            }
+            else{
+                $message ="مرحبا عميل الجواب الرمز ";
+                $code = $this->send_code($request->phone, $message , $request->phone_id);
+                if($code !== false){
+                    $data = (object)[
+                        'code'=>(string)$code
+                    ];
+                    return $this->returnSuccessMessage($data);
+                }else{
+                    return $this->returnError('100003', "verification code has not sent ");
+                }
+            }
+
         }
-        else{
-            $message ="مرحبا عميل الجواب الرمز ";
+        else
+        {
+
+            $message ="مرحبا سائق الجواب الرمز ";
             $code = $this->send_code($request->phone, $message , $request->phone_id);
             if($code !== false){
-                return $this->returnSuccessMessage($code);
+                $data = (object)[
+                    'code'=>(string)$code
+                ];
+                return $this->returnSuccessMessage($data);
             }else{
-                return $this->returnError('', "verification code has not sent ");
+                return $this->returnError('100003', "verification code has not sent ");
             }
         }
+       
+
+
+
+
+
+
+
+       
     }
     public function send_message_update(Request $request)
     {

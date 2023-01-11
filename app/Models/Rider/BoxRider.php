@@ -30,6 +30,13 @@ class BoxRider extends Model
         'deposit_date',
         'bank_account_number',
     ];
+    protected $casts = [
+
+        'total_money'  => "string",
+        'tax'  => "string",
+        'money'  => "string",
+        'id'  => "string",
+        ];
     public function added_by(){
         return $this->belongsTo(\App\Models\Admin::class,  'foreign_key', 'add_by');
     }

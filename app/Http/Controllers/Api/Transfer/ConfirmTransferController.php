@@ -20,11 +20,11 @@ class ConfirmTransferController extends Controller
         ]);
         $rider = \App\Models\Rider::select(['id', 'name', 'phone', 'account'])->find($request->rider_id);
         if($rider === null){
-            return $this->returnError('E005',"حدث خطاء ما الرجاء المحاولة مرة اخرى");
+            return $this->returnError('100008',"حدث خطاء ما الرجاء المحاولة مرة اخرى");
         }
         if($request->type === 'driver'){
             $data = \App\Models\Driver::select(['id', 'name', 'phone' , 'account', 'remember_token'])
-                                        ->where("id" , $request->transfer_to)
+                                      
                                         ->where("phone" , $request->phone)->get();
             if(count($data) > 0){
                 if($rider->account > $request->money){
@@ -66,20 +66,26 @@ class ConfirmTransferController extends Controller
                     $data[0]->save();
                     $this->push_notification($data[0]->remember_token, 'تم تحويل رصيد إلى حسابك' , $descrpition , 'transfer');
 
-                    return $this -> returnSuccessMessage($descrpition);
+                    $data = (object)[
+                        'message_transfer'=>(string)$descrpition,
+                        'success_transfer'=>true,
+                        'id_transfer'=>(string)$BoxRider->id,
+                        
+                    ];
+                    return $this -> returnData($data,"success treansfer");
 
                 }else{
-                    return $this->returnError('E001',"لا يوجد رصيد كافى ");
+                    return $this->returnError('100011',"لا يوجد رصيد كافى ");
                 }
             }else{
-                return $this->returnError('E002',"لا يوجد بيانات بهذا الرقم الرجاء التأكد من البيانات ");
+                return $this->returnError('100012',"لا يوجد بيانات بهذا الرقم الرجاء التأكد من البيانات ");
 
             }
         }
         else if($request->type === 'rider')
         {
             $data = \App\Models\Rider::select(['id', 'name', 'phone' , 'account', 'remember_token'])
-                                        ->where("id" , $request->transfer_to)
+                                      
                                         ->where("phone" , $request->phone)->get();
             if(count($data) > 0){
                 if($rider->account > $request->money){
@@ -121,18 +127,25 @@ class ConfirmTransferController extends Controller
                     $data[0]->save();
                     $this->push_notification($data[0]->remember_token, 'تم تحويل رصيد إلى حسابك' , $descrpition , 'transfer');
 
-                    return $this -> returnSuccessMessage($descrpition);
+                    $data = (object)[
+                        'message_transfer'=>(string)$descrpition,
+                        'success_transfer'=>true,
+                        'id_transfer'=>(string)$BoxRider->id,
+                        
+                    ];
+                    return $this -> returnData($data,"success treansfer");
 
                 }else{
-                    return $this->returnError('E001',"لا يوجد رصيد كافى ");
+                    return $this->returnError('100011',"لا يوجد رصيد كافى ");
                 }
             }else{
-                return $this->returnError('E002',"لا يوجد بيانات بهذا الرقم الرجاء التأكد من البيانات ");
+                return $this->returnError('100012',"لا يوجد بيانات بهذا الرقم الرجاء3333 التأكد من البيانات ");
 
             }
         }
         else{
-            return $this->returnError('E003',"الرجاء التأكد من الجهة المحول لها  ");
+            return $this->returnError('100012',"لا يوجد بيانات بهذا الرقم الرجاء.................. التأكد من البيانات ");
+
         }
         
     }

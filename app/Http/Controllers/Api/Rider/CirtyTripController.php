@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Rider;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Rider;
 use Carbon\Carbon;
@@ -67,14 +68,15 @@ class CirtyTripController extends Controller
                     $rider->save();
                     $rider->trip_city_cost = $total_cost;
                     
-                    $this->push_notification($rider->remember_token, 'تم الخصم من الرصيد', $rider,'city_payment');
-                    return $this -> returnData('data' , $trip, 'city trip saved successfully');   
+                    $this->push_notification($rider->remember_token, 'تم الخصم من الرصيد', $boxRider->descrpition,'city_payment');
+                    
+                    return $this -> returnData(true, 'city trip saved successfully');   
                 }
                 
-                return $this->returnError('E001',"لا يوجد رصيد كافى ");
+                return $this->returnError('100011',"لا يوجد رصيد كافى ");
             }
             else{
-                return $this->returnError('E001',"هذا التصنيف لا يحتوى على رحلات للمدينة المحددة");
+                return $this->returnError('100013',"هذا التصنيف لا يحتوى على رحلات للمدينة المحددة");
             }
 
 
@@ -104,11 +106,13 @@ class CirtyTripController extends Controller
     } 
     public function city_category()
     {
-        $data = DB::select(' select category.id as categoryId, category.category_name,
-                    city.id as cityId, city.city, city.going_cost, city.going_back_cost, city.city_cancel_cost 
-                    from category , city where category.id = city.category_id and category.show_in_app = true order by categoryId ;');
+        $data = DB::select("select concat(category.id,'') as categoryId, category.category_name,
+                concat(city.id,'') as cityId, city.city, city.going_cost, city.going_back_cost, city.city_cancel_cost 
+                    from category , city where category.id = city.category_id and category.show_in_app = true order by categoryId ;");
         
-        return $this -> returnData('data' , $data, 'city');   
+      
+                    
+        return $this -> returnData($data, 'city');   
         
     }
 

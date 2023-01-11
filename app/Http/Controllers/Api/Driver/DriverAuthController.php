@@ -157,13 +157,7 @@ class DriverAuthController extends Controller
             $driverData->save();
             $driverData->api_token  = $request->header('auth-token');
             $verison = Version::all();
-
-          
-        
-         
-            
-
-            $notes = notes::select(['id' ,'title_ar','title_en','subtitle_ar','subtitle_en'])->get()->last();
+           $notes = notes::select(['id' ,'title_ar','title_en','subtitle_ar','subtitle_en'])->get()->last();
             $banner = banner::select(['id','title','image'])->get();
           
             $verison = Version::all();
@@ -229,9 +223,7 @@ class DriverAuthController extends Controller
             }catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e){
                 return  $this -> returnError('100000','some thing went wrongs');
             }
-            // catch(\Exception $ex){
-            //     return $this->returnError($ex->getCode(), $ex->getMessage());
-            // }   
+              
             return $this->returnSuccessMessage("Logout Successfully");
         }else{
             return $this->returnError('100000', 'some thing is wrongs');
@@ -331,7 +323,7 @@ class DriverAuthController extends Controller
                 $driverData = Auth::guard('driver-api') -> user();
                 $driver = Driver::where('phone', $request->phone)->get();
                 if(count($driver)){
-                    return $this->returnError('100008', "Phone number already exist");
+                    return $this->returnError('100006', "Phone number already exist");
                 }
                 if($driverData !== null){
                     $driverData->phone = $request->phone;
@@ -391,17 +383,49 @@ class DriverAuthController extends Controller
             try{
                 $driverData = Auth::guard('driver-api') -> user();
                 if($driverData){
-                    if( Hash::check( $request->old_password, $driverData->password)){
+                    if(Hash::check( $request->old_password, $driverData->password)){
                         
                         $driverData -> password =  Hash::make($request->new_password);
                         $driverData->save();
                         $driverData->api_token = $token;
+                    
                         $verison = Version::all();
-                        $driverData -> version = $verison[0]->driver;
-                        $driverData -> updating = $verison[0]->driver_state;
-                        $driverData -> iosVersion = $verison[1]->driver;
-                        $driverData -> iosUpdating = $verison[1]->driver_state;        
-                        return $this -> returnData('driver' , $driverData,'Password updated successfuly');
+                        $data = (object)[
+                            'id'=>(string)$driverData->id,
+                            'name'=>$driverData->name,
+                            'phone'=>$driverData->phone,
+                            'account'=>(double)$driverData->account,
+                            'api_token'=>$driverData->api_token,
+                            'current_vechile'=>(string)$driverData->current_vechile,
+                            'current_loc_latitude'=>$driverData->current_loc_latitude,
+                            'current_loc_longtitude'=>$driverData->current_loc_longtitude,
+                            'current_loc_name'=>$driverData->current_loc_name,
+                            'persnol_photo'=>$driverData->persnol_photo,
+                            'state'=>$driverData->state,
+                            'driverRate'=>(string)$driverData->driver_rate,
+                            'driverCounter'=>(string)$driverData->driver_counter,
+                            'vechileRate'=>(string)$driverData->vechile_rate,
+                            'vechileCounter'=>(string)$driverData->vechile_counter,
+                            'timeRate'=>(string)$driverData->time_rate,
+                            'timeCounter'=>(string)$driverData->time_counter,
+                            'idCopyNo'=>(string)$driverData->id_copy_no,
+                            'idExpirationDate'=>$driverData->id_expiration_date,
+                            'licenseType'=>$driverData->license_type,
+                            'licenseExpirationDate'=>$driverData->license_expiration_date,
+                            'birthDate'=>(string)$driverData->birth_date,
+                            'startWorkingDate'=>$driverData->start_working_date,
+                            'contractEndDate'=>$driverData->contract_end_date,
+                            'finalClearanceDate'=>$driverData->final_clearance_date,
+                            'email'=>$driverData->email,
+                            'ssd'=>$driverData->ssd,
+                            'currentVersionAndroid' =>  $verison[0]->driver,
+                            'updatedAndroid' =>  $verison[0]->driver_state==0?false:true,
+                            'currentVersionIos' =>  $verison[1]->driver,
+                            'updatedIos' =>  $verison[1]->driver_state==0?false:true
+                        ]; 
+    
+                        return $this -> returnData($data,'password updated successfuly');
+                    
                     }
                     else{
                         return $this->returnError('100009', "Password is't not update");
@@ -509,7 +533,6 @@ class DriverAuthController extends Controller
             'img_profile' => 'required|mimes:jpeg,png,jpg,',
             'img_id' => 'required|mimes:jpeg,png,jpg,',
             'img_license' => 'required|mimes:jpeg,png,jpg,',
-            'img_document' => 'required|mimes:jpeg,png,jpg,',
             'img_car_front' => 'required|mimes:jpeg,png,jpg,',
             'img_car_back' => 'required|mimes:jpeg,png,jpg,',
             'img_car_internal' => 'required|mimes:jpeg,png,jpg,',
@@ -548,7 +571,6 @@ class DriverAuthController extends Controller
        
         $this->add_document($driver->id, 'صورة الهوية للسائق' , 'صورة الهوية للسائق تمت اضافتها عن طريق التطبيق', $request->file('img_id'), 'id');
         $this->add_document($driver->id, 'صورة رخصة القيادة للسائق' , 'صورة رخصة القيادة للسائق تمت اضافتها عن طريق التطبيق', $request->file('img_license'), 'lecincse');
-        $this->add_document($driver->id, 'صورة الوثيقة للسائق' , 'صورة رخصة القيادة للسائق تمت اضافتها عن طريق التطبيق', $request->file('img_document'), 'document');
         $this->add_document($driver->id, 'صورة امامية للمركبة' , 'صورة امامية للمركبة تمت اضافتها عن طريق التطبيق', $request->file('img_car_front'), 'front');
         $this->add_document($driver->id, 'صورة خلفية للمركبة' , 'صورة خلفية للمركبة تمت اضافتها عن طريق التطبيق', $request->file('img_car_back'), 'back');
         $this->add_document($driver->id, 'صورة داخلية للمركبة' , 'صورة داخلية للمركبة تمت اضافتها عن طريق التطبيق', $request->file('img_car_internal'), 'internal');
@@ -635,7 +657,10 @@ class DriverAuthController extends Controller
             // catch(\Exception $ex){
             //     return $this->returnError($ex->getCode(), $ex->getMessage());
             // }   
-            return $this->returnSuccessMessage("delete account succesfully");
+            $data=true;
+
+            
+            return $this->returnData($data,"delete account succesfully");
         }else{
             return $this->returnError('100000', 'some thing is wrongs');
         }

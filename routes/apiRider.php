@@ -14,7 +14,7 @@ Route::group([
     // Register and login rider
     Route::post('register'  ,          [RiderAuthController::class, 'register']);
     Route::post('login'     ,  [RiderAuthController::class, 'login']);
-    Route::post('chech/phone'     ,  [RiderAuthController::class, 'chech_phone']);
+    Route::post('check/phone'     ,  [RiderAuthController::class, 'check_phone']);
     
     //send message to login or register
     Route::post('send/message', [App\Http\Controllers\Api\Messages\MessagesController::class, 'send_message']);
@@ -28,8 +28,6 @@ Route::group([
         
         // Delete account 
         Route::post('delete/account', [RiderAuthController::class, 'block_account']);
-
-
         // Rider modifications
         Route::post('modify/email', [RiderAuthController::class, 'email_update']);
         Route::post('modify/name', [RiderAuthController::class, 'name_update']);
@@ -38,7 +36,8 @@ Route::group([
         Route::post('modify/birth/date', [RiderAuthController::class, 'birth_date_update']);    
         Route::post('modify/gender', [RiderAuthController::class, 'gender_update']);    
         
-        Route::post('update/data', [RiderAuthController::class, 'rider_update']);    
+        Route::post('update/data', [RiderAuthController::class, 'rider_update']);   
+        Route::post('home/data', [RiderAuthController::class, 'rider_data']); 
         
         // Rider Trip 
         Route::post('request', [TripController::class, 'request']);
@@ -63,7 +62,8 @@ Route::group([
         Route::post('trip/rate', [App\Http\Controllers\Api\Rider\RiderRating\RiderRatingController::class, 'rider_add_rating']);
 
         // Show my Trip
-        Route::post('trips/{page?}', [TripController::class, 'trips']);
+        Route::post('internal/trips/{page?}', [TripController::class, 'trips']);
+        Route::post('city/trips/{page?}', [TripController::class, 'trips_city']);
         Route::post('specific/trip', [App\Http\Controllers\Api\DriverRider\DriverRiderController::class, 'specific_trip']);
         
         // Show rider bonds
